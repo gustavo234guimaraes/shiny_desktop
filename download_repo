@@ -1,0 +1,33 @@
+
+
+download_repo<-function(repo_url,dest.dir=getwd()){
+  attempt<-suppressMessages(suppressWarnings(try(download.file(repo_url,destfile = tempfile(),quiet = T),silent = T)))
+  if(grepl("Error",attempt)){
+    stop(paste0(repo_url," could not be accessed. Check that the repository is public."),call. = F)
+    return(FALSE)
+  }
+  old_dirs<-basename(list.dirs(path = dest.dir,recursive = F))
+  file<-gsub("\\.git",".zip",basename(repo_url))
+  file.create(file)
+  download.file(gsub("\\.git","/archive/master.zip",repo_url),destfile = file)
+  unzip(file,exdir = dest.dir)
+  dir<-basename(list.dirs(path = dest.dir,recursive = F))
+  if(length(old_dirs)>0){
+    dir<-dir[dir!=old_dirs]
+  }
+  files<-list.files(path=dest.dir,recursive = T)
+  files<-files[files!=file]
+  in_old_dirs<-unlist(lapply(files, function(x){
+    substring(x,first = 1,last=unlist(gregexpr("/",x))[1]-1)
+  }))%in%old_dirs
+  files<-files[!in_old_dirs]
+  dirs<-paste0(dest.dir,unique(gsub(dir,"",dirname(files))))
+  suppressWarnings(lapply(dirs, dir.create))
+  cat("Copying files to ",dest.dir,sep = "\n")
+  copy_res<-lapply(files, function(x) file.copy(from = paste0(dest.dir,"/",x), to = gsub(dir,dest.dir,x)))
+  unlink(dir,recursive = T)
+  file.remove(file)
+  return(sum(unlist(copy_res))>0)
+}
+
+
