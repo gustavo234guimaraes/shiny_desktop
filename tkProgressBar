@@ -1,0 +1,117 @@
+library(tcltk)
+
+tk.ProgressBar<-function(title = "R progress bar", label = "", min = 0, max = 1, 
+                         initial = 0, width = 300,height=200,icon="city.ico"){
+  useText <- FALSE
+  tclServiceMode(FALSE)
+  have_ttk <- as.character(tcl("info", "tclversion")) >= "8.5"
+  if (!have_ttk && as.character(tclRequire("PBar")) == "FALSE") 
+    useText <- TRUE
+  res<-get.res()
+  .win <- tktoplevel()
+  tcl("wm","iconbitmap",.win,icon)
+  tkwm.resizable(.win,FALSE,FALSE)
+  tcl("wm","geometry",.win,paste0(width,"x",height,"+",
+                                  res$w/2-width/2,"+",res$h/2-height/2))
+  tkwm.minsize(.win,width,height)
+  .val <- initial
+  .killed <- FALSE
+  tkwm.title(.win, title)
+  fn <- tkfont.create(family = "helvetica", size = 12)
+  if (useText) {
+    .lab <- tklabel(.win, text = label, font = fn, padx = 20)
+    tkpack(.lab, side = "left")
+    fn2 <- tkfont.create(family = "helvetica", size = 16)
+    .vlab <- tklabel(.win, text = "0%", font = fn2, padx = 20)
+    tkpack(.vlab, side = "right")
+    up <- function(value) {
+      if (!is.finite(value) || value < min || value > max) 
+        return()
+      .val <<- value
+      tkconfigure(.vlab, text = sprintf("%d%%", round(100 * 
+                                                        (value - min)/(max - min))))
+    }
+  }
+  else {
+    .lab <- tklabel(.win, text = label, font = fn)
+    .tkval <- tclVar(0)
+    tkpack(.lab, pady = c(30,10))
+    tkpack(tklabel(.win, text = "", font = fn), side = "bottom")
+    pBar <- if (have_ttk) 
+      ttkprogressbar(.win, length = width*0.8, variable = .tkval)
+    else tkwidget(.win, "ProgressBar", width = width*0.8, variable = .tkval)
+    tkpack(pBar, pady=5)
+    up <- function(value) {
+      if (!is.finite(value) || value < min || value > max) 
+        return()
+      .val <<- value
+      tclvalue(.tkval) <<- 100 * (value - min)/(max - min)
+    }
+  }
+  getVal <- function() .val
+  kill <- function() if (!.killed) {
+    tkdestroy(.win)
+    .killed <<- TRUE
+  }
+  button <- function() {
+    b<-tkbutton(.win,text="Fechar")
+    tkconfigure(b , command = kill )
+    tkpack(b,side="bottom")
+  }
+  getWin <- function() .win
+  title <- function(title) tkwm.title(.win, title)
+  lab <- function(label) tkconfigure(.lab, text = label)
+  tkbind(.win, "<Destroy>", kill)
+  tclServiceMode(TRUE)
+  up(initial)
+  structure(list(getVal = getVal, getWin=getWin ,up = up, title = title,
+                 label = lab, button = button, kill = kill),
+            class = "tkProgressBar")
+}
+
+tk.ProgressBar.into<-function(.win, label = "", min = 0, max = 1, 
+                         initial = 0, width = 300){
+  useText <- FALSE
+  have_ttk <- as.character(tcl("info", "tclversion")) >= "8.5"
+  if (!have_ttk && as.character(tclRequire("PBar")) == "FALSE") 
+    useText <- TRUE
+  .val <- initial
+  .killed <- FALSE
+  fn <- tkfont.create(family = "helvetica", size = 12)
+  if (useText) {
+    .lab <- tklabel(.win, text = label, font = fn, padx = 20)
+    tkpack(.lab, side = "left")
+    fn2 <- tkfont.create(family = "helvetica", size = 16)
+    .vlab <- tklabel(.win, text = "0%", font = fn2, padx = 20)
+    tkpack(.vlab, side = "right")
+    up <- function(value) {
+      if (!is.finite(value) || value < min || value > max) 
+        return()
+      .val <<- value
+      tkconfigure(.vlab, text = sprintf("%d%%", round(100 * 
+                                                        (value - min)/(max - min))))
+    }
+  }
+  else {
+    .lab2 <- tklabel(.win, text = label, font = fn)
+    .tkval2 <- tclVar(0)
+    tkpack(.lab2, pady = c(5,5))
+    tkpack(tklabel(.win, text = "", font = fn), side = "bottom")
+    pBar2 <- if (have_ttk) 
+      ttkprogressbar(.win, length = width, variable = .tkval2)
+    else tkwidget(.win, "ProgressBar", width = width, variable = .tkval2)
+    tkpack(pBar2, pady=1)
+    up <- function(value) {
+      if (!is.finite(value) || value < min || value > max) 
+        return()
+      .val2 <<- value
+      tclvalue(.tkval2) <<- 100 * (value - min)/(max - min)
+    }
+  }
+  getVal <- function() .val2
+  lab <- function(label) tkconfigure(.lab2, text = label)
+  up(initial)
+  structure(list(getVal = getVal,up = up,
+                 label = lab),
+            class = "tkProgressBarInto")
+}
