@@ -1,0 +1,13 @@
+change_app<-function(dir,ico){
+  app<-readLines(paste0(dir,"/app.R"))
+  app<-gsub('use_desktop_ico\\(\\)',
+            paste0(
+              "tags$head(tags$link(
+                rel = 'shortcut icon',
+                href='",ico,"',",
+                "type='image/x-icon'
+              ))"
+            ),
+            app)
+  writeLines(app,paste0(dir,"/app.R"))
+}
