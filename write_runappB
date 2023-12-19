@@ -3,3 +3,7 @@ write_runappB<-function(){
     paste0('"',normalizePath(R.home()),'\\bin\\Rscript.exe" -e ',"\"system(paste0('\\\"',normalizePath(R.home()),'\\\\bin\\\\Rscript.exe\\\" runapp.R'),wait=F)\"")
   ),"runapp.bat")
 }
+
+write_launch<-function(dir){
+  writeLines(paste0('wscript "',dir,'/launch.vbs" "',dir,'/runapp.bat"' ),"launch.bat")
+}
