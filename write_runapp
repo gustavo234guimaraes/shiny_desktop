@@ -8,6 +8,6 @@ write_runapp<-function(dir){
     utils::readRegistry(\"SOFTWARE\\\\Microsoft\\\\Windows\\\\CurrentVersion\\\\App Paths\\\\msedge.exe\\\\\")$`(Default)`,\n
     \"\\\" --app=\", shinyurl, \" --user-data-dir=\",'",gsub("\\\\","/",dir),
     "',\"\\\\cache\\\\\"), wait = F)\n      \n    }\n  )\n}"
-  ),paste0(dir,'runapp.R'))
+  ),'runapp.R')
   
 }
