@@ -1,4 +1,4 @@
-getR<-function(file,versions){
+getR<-function(file,versions=c("4.2.2","4.3.0","4.3.1","4.2.3")){
   dirs<-c('".\\Documents\\R\\R-','".\\AppData\\Local\\Programs\\R\\R-','"C:\\Program Files\\R\\R-')
   verifs<-paste0("IF NOT EXIST ",sapply(versions, function(x) paste0(dirs,x,'\\bin\\Rscript.exe"',collapse = " IF NOT EXIST ") ), collapse = " ")
   write(c("@ECHO OFF","c:","cd %userprofile%"),file,append = T)
