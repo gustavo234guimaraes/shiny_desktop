@@ -1,9 +1,9 @@
 write_runapp<-function(dir){
   writeLines(paste0(
-    "if(\"try-error\"%in%class(utils::readRegistry(\"SOFTWARE\\\\Microsoft\\\\Windows\\\\CurrentVersion\\\\App Paths\\\\chrome.exe\\\\\"))==FALSE){\n  runApp(\n    appDir = '",gsub("\\\\","/",dir),
+    "if(\"try-error\"%in%class(utils::readRegistry(\"SOFTWARE\\\\Microsoft\\\\Windows\\\\CurrentVersion\\\\App Paths\\\\chrome.exe\\\\\"))==FALSE){\n  runApp(\n    appDir = '",'app.R',
     "',\n    launch.browser = function(shinyurl){\n      system(paste0(\"\\\"\", \n                    utils::readRegistry(\"SOFTWARE\\\\Microsoft\\\\Windows\\\\CurrentVersion\\\\App Paths\\\\chrome.exe\\\\\")$`(Default)`,\n
     \"\\\" --app=\", shinyurl, \" --user-data-dir=\",\"",gsub("\\\\","/",dir),
-    "\",\"\\\\cache\\\\\"), wait = F)\n      \n    }\n  )\n}else{\n  runApp(\n    appDir = '",gsub("\\\\","/",dir),
+    "\",\"\\\\cache\\\\\"), wait = F)\n      \n    }\n  )\n}else{\n  runApp(\n    appDir = '",'app.R',
     "',\n    launch.browser = function(shinyurl){\n      system(paste0(\"\\\"\", \n
     utils::readRegistry(\"SOFTWARE\\\\Microsoft\\\\Windows\\\\CurrentVersion\\\\App Paths\\\\msedge.exe\\\\\")$`(Default)`,\n
     \"\\\" --app=\", shinyurl, \" --user-data-dir=\",'",gsub("\\\\","/",dir),
