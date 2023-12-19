@@ -1,6 +1,6 @@
 write_runappB<-function(){
   writeLines(paste0(
-    paste0('"',normalizePath(R.home()),'\\bin\\Rscript.exe" -e ',"\"system(paste0('\\\"',normalizePath(R.home()),'\\\\bin\\\\Rscript.exe\\\" runapp.R'),wait=F)\"")
+    paste0('"',normalizePath(R.home()),'\\bin\\Rscript.exe" -e ',"\"system(paste0('\\\"',normalizePath(R.home()),'\\\\bin\\\\Rscript.exe\\\"',getwd(),'/runapp.R'),wait=F)\"")
   ),"runapp.bat")
 }
 
