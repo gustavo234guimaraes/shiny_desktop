@@ -1,0 +1,3 @@
+set_shortcut<-function(name,dir,ico){
+  system(paste0('powershell ',"\"$s=(New-Object -COM WScript.Shell).CreateShortcut('",Sys.getenv("appdata"),"/Microsoft/Windows/Start Menu/",name,".lnk');$s.TargetPath='",dir,"/launch.bat';$s.IconLocation='",paste0(dir,'/',ico),"';$s.WindowStyle=7;$s.Save()\""))
+}
