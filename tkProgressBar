@@ -120,5 +120,5 @@ tk.ProgressBar.into<-function(.win, label = "", min = 0, max = 1,
   up(initial)
   structure(list(getVal = getVal,up = up,
                  label = lab),
-            class = "tkProgressBarInto")
+            class = "tkProgressBar")
 }
