@@ -2,7 +2,9 @@ install_withProgress<-function(pkgs,pb){
   
   for (i in 1:length(pkgs)) {
     setTkProgressBar(pb,value=i/length(pkgs),label = paste0("Installing package ",i," of ",length(pkgs)))
-    install.packages(x,repos='https://cloud.r-project.org/')
+    if(x%in%installed.packages()==FALSE){
+      install.packages(x,repos='https://cloud.r-project.org/')
+    }
   }
   
   
