@@ -1,0 +1,9 @@
+getR<-function(file,versions=c("4.2.2","4.3.0","4.3.1","4.2.3")){
+  dirs<-c('".\\Documents\\R\\R-','".\\AppData\\Local\\Programs\\R\\R-','"C:\\Program Files\\R\\R-')
+  verifs<-paste0("IF NOT EXIST ",sapply(versions, function(x) paste0(dirs,x,'\\bin\\Rscript.exe"',collapse = " IF NOT EXIST ") ), collapse = " ")
+  write(c("@ECHO OFF","c:","cd %userprofile%"),file,append = T)
+  write(paste0(verifs,' curl.exe --output ".\\Downloads\\setup_R-4.2.3.exe" --url https://cran.r-project.org/bin/windows/base/old/4.2.3/R-4.2.3-win.exe timeout 2'),file,append=T)
+  write(paste0(verifs,' start /b /w "" ".\\Downloads\\setup_R-4.2.2.exe" /VERYSILENT'),file,append=T)
+  setr<-sapply(versions, function(x) paste0("IF EXIST ",dirs,x,'\\bin\\Rscript.exe"',' set R=',dirs,x,'\\bin\\Rscript.exe"') )
+  write(setr,file,append = T)
+}
